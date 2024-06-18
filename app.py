@@ -50,13 +50,13 @@ def filter_articles(articles, keywords):
         article_content_lower = article_content.lower()  # Convert content to lowercase
         for keyword in keywords_with_plural:
             if keyword in article_content_lower:
-                # Add hyperlink to the arXiv ID
-                article_title_hyperlink = re.sub(
-                    r'\[(\d+)\]\s+arXiv:(\d+\.\d+)',
-                    r'<a href="https://arxiv.org/\2">[\1] arXiv:\2</a>',
+                # Add LINK to the arXiv ID
+                article_title_with_link = re.sub(
+                    r'(\[\d+\]\s+arXiv:(\d+\.\d+))',
+                    r'\1 <a href="https://arxiv.org/\2">LINK</a>',
                     article_title
                 )
-                filtered_articles[article_title_hyperlink] = article_content
+                filtered_articles[article_title_with_link] = article_content
                 break
     return filtered_articles
 
