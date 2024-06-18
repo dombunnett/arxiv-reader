@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>arXiv reader</title>
+</head>
+<body>
+    <h1>arXiv reader</h1>
+    <form action="https://arxiv-reader-dc763b3840de.herokuapp.com/search" method="POST">
+        <fieldset>
+            <legend>Choose a Webpage URL:</legend>
+            <input type="radio" id="mathAG" name="url" value="https://arxiv.org/list/math.AG/new" required>
+            <label for="mathAG">math.AG (Algebraic Geometry)</label><br>
+            
+            <input type="radio" id="mathAC" name="url" value="https://arxiv.org/list/math.AC/new" required>
+            <label for="mathAC">math.AC (Commutative Algebra)</label><br>
+            
+            <input type="radio" id="mathAT" name="url" value="https://arxiv.org/list/math.AT/new" required>
+            <label for="mathAT">math.AT (Algebraic Topology)</label><br>
+            
+            <input type="radio" id="mathDG" name="url" value="https://arxiv.org/list/math.DG/new" required>
+            <label for="mathDG">math.DG (Differential Geometry)</label><br>
+            
+            <input type="radio" id="mathNT" name="url" value="https://arxiv.org/list/math.NT/new" required>
+            <label for="mathNT">math.NT (Number Theory)</label><br>
+        </fieldset>
+        
+        <label for="keywords">Keywords (space-separated):</label><br>
+        <input type="text" id="keywords" name="keywords" required><br><br>
+        
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>
