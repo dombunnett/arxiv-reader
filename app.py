@@ -1,8 +1,10 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template
 import requests
 from bs4 import BeautifulSoup
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/search": {"origins": "https://dombunnett.github.io"}})
 
 # Function to fetch and parse the webpage
 def fetch_webpage(url):
@@ -51,48 +53,23 @@ def filter_articles(articles, keywords):
                 break
     return filtered_articles
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    if request.method == 'POST':
-        url = request.form.get('url')
-        keywords = request.form.get('keywords').split()
-        try:
-            content = fetch_webpage(url)
-            articles = extract_articles(content)
-            filtered_articles = filter_articles(articles, keywords)
-            results = ''.join([f"<h2>{title}</h2><pre>{content}</pre><hr>" for title, content in filtered_articles.items()])
-        except Exception as e:
-            results = f"<p>Error: {str(e)}</p>"
-        return render_template_string(template, results=results)
-    return render_template_string(template, results='')
+    return render_template('arXiv-reader.html')
 
-template = '''
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article Keyword Search</title>
-</head>
-<body>
-    <h1>Article Keyword Search</h1>
-    <form method="POST">
-        <label for="url">Webpage URL:</label><br>
-        <input type="text" id="url" name="url" required><br><br>
-        <label for="keywords">Keywords (space-separated):</label><br>
-        <input type="text" id="keywords" name="keywords" required><br><br>
-        <input type="submit" value="Search">
-    </form>
-    <hr>
-    <div>{{ results|safe }}</div>
-</body>
-</html>
-'''
+@app.route('/search', methods=['POST'])
+def search():
+    url = request.form.get('url')
+    keywords = request.form.get('keywords').split()
+    try:
+        content = fetch_webpage(url)
+        articles = extract_articles(content)
+        filtered_articles = filter_articles(articles, keywords)
+        results = ''.join([f"<h2>{title}</h2><pre>{content}</pre><hr>" for title, content in filtered_articles.items()])
+        return results
+    except Exception as e:
+        return f"<p>Error: {str(e)}</p>", 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
-
+    app.run(debug=True, host='0.0.0.0')
 
