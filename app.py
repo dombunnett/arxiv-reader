@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 import requests
 from bs4 import BeautifulSoup
 from flask_cors import CORS
+import re
 
 app = Flask(__name__)
 CORS(app, resources={r"/search": {"origins": "https://dombunnett.github.io"}})
@@ -17,7 +18,7 @@ def fetch_webpage(url):
 def extract_articles(content):
     soup = BeautifulSoup(content, 'html.parser')
     text = soup.get_text()
-    
+
     articles = {}
     current_article = None
     article_lines = []
@@ -32,12 +33,12 @@ def extract_articles(content):
             current_article = line
         elif current_article is not None:
             article_lines.append(line)
-    
+
     if current_article is not None:
         # Remove leading empty lines for the last article
         article_lines = [line for line in article_lines if line.strip() != '']
         articles[current_article] = '\n'.join(article_lines)
-    
+
     return articles
 
 # Function to filter articles by keywords (case-insensitive and handles plurals)
@@ -49,7 +50,13 @@ def filter_articles(articles, keywords):
         article_content_lower = article_content.lower()  # Convert content to lowercase
         for keyword in keywords_with_plural:
             if keyword in article_content_lower:
-                filtered_articles[article_title] = article_content
+                # Add hyperlink to the arXiv ID
+                article_title_hyperlink = re.sub(
+                    r'\[(\d+)\]\s+arXiv:(\d+\.\d+)',
+                    r'<a href="https://arxiv.org/\2">[\1] arXiv:\2</a>',
+                    article_title
+                )
+                filtered_articles[article_title_hyperlink] = article_content
                 break
     return filtered_articles
 
