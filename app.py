@@ -65,7 +65,7 @@ def search():
         content = fetch_webpage(url)
         articles = extract_articles(content)
         filtered_articles = filter_articles(articles, keywords)
-        results = ''.join([f"<h2>{title}</h2><pre>{content}</pre><hr>" for title, content in filtered_articles.items()])
+        results = ''.join([f"<h2>{title}</h2><pre style=\"white-space: pre-wrap; word-wrap: break-word;\">{content}</pre><hr>" for title, content in filtered_articles.items()])
         return results
     except Exception as e:
         return f"<p>Error: {str(e)}</p>", 400
