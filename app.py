@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import requests
+import re
 from bs4 import BeautifulSoup
 from flask_cors import CORS
 
@@ -53,6 +54,13 @@ def filter_articles(articles, keywords):
                 break
     return filtered_articles
 
+# Function to extract arXiv ID from article content
+def extract_arxiv_id(content):
+    match = re.search(r'arXiv:(\d{4}\.\d{4,5})', content)
+    if match:
+        return match.group(1)
+    return None
+
 @app.route('/')
 def index():
     return render_template('arXiv-reader.html')
@@ -65,7 +73,15 @@ def search():
         content = fetch_webpage(url)
         articles = extract_articles(content)
         filtered_articles = filter_articles(articles, keywords)
-        results = ''.join([f"<h2>{title}</h2><pre style=\"white-space: pre-wrap; word-wrap: break-word;\">{content}</pre><hr>" for title, content in filtered_articles.items()])
+        results_list = []
+        for title, content in filtered_articles.items():
+            arxiv_id = extract_arxiv_id(content)
+            if arxiv_id:
+                link = f'<h2><a href="https://arxiv.org/abs/{arxiv_id}" target="_blank">{title}</a></h2>'
+            else:
+                link = f'<h2>{title}</h2>'
+            results_list.append(f'{link}<pre style="white-space: pre-wrap; word-wrap: break-word;">{content}</pre><hr>')
+        results = ''.join(results_list)
         return results
     except Exception as e:
         return f"<p>Error: {str(e)}</p>", 400
