@@ -77,7 +77,7 @@ def search():
         for title, content in filtered_articles.items():
             arxiv_id = extract_arxiv_id(content)
             if arxiv_id:
-                link = f'<h2><a href="https://arxiv.org/abs/{arxiv_id}" target="_blank">{title}</a></h2>'
+                link = f'<h2><a href="https://arxiv.org/abs/{arxiv_id}" target="_blank">arXiv:{arxiv_id}</a></h2>'
             else:
                 link = f'<h2>{title}</h2>'
             results_list.append(f'{link}<pre style="white-space: pre-wrap; word-wrap: break-word;">{content}</pre><hr>')
