@@ -77,15 +77,14 @@ def search():
         results_list = []
         for title, content in filtered_articles.items():
             arxiv_id = extract_arxiv_id(content)
-            if arxiv_id:
-                link = f'<h2><a href="https://arxiv.org/abs/{arxiv_id}" target="_blank">arXiv:{arxiv_id}</a></h2>'
-            else:
-                link = f'<h2>{title}</h2>'
-            results_list.append(f'{link}<pre style="white-space: pre-wrap; word-wrap: break-word;">{content}</pre><hr>')
-        results = ''.join(results_list)
-        return results
+            results_list.append({
+                'title': title,
+                'arxiv_id': arxiv_id,
+                'content': content
+            })
+        return render_template('results.html', results=results_list, count=len(results_list), error=None)
     except Exception as e:
-        return f"<p>Error: {str(e)}</p>", 400
+        return render_template('results.html', results=[], count=0, error=str(e))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
