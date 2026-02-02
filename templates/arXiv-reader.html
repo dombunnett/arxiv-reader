@@ -3,34 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>arXiv reader</title>
+    <title>arXiv Reader</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            margin: 0 0 1.5rem 0;
+            color: #333;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        fieldset {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        legend {
+            font-weight: 600;
+            color: #555;
+            padding: 0 0.5rem;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            cursor: pointer;
+        }
+        .radio-option:hover { background: #f8f9fa; border-radius: 4px; }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+            margin-right: 0.75rem;
+        }
+        label { color: #444; cursor: pointer; }
+        .keywords-label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+    </style>
 </head>
 <body>
-    <h1>arXiv reader</h1>
-    <form action="https://arxiv-reader-dc763b3840de.herokuapp.com/search" method="POST">
-        <fieldset>
-            <legend>Choose a Webpage URL:</legend>
-            <input type="radio" id="mathAG" name="url" value="https://arxiv.org/list/math.AG/new" required>
-            <label for="mathAG">math.AG (Algebraic Geometry)</label><br>
-            
-            <input type="radio" id="mathAC" name="url" value="https://arxiv.org/list/math.AC/new" required>
-            <label for="mathAC">math.AC (Commutative Algebra)</label><br>
-            
-            <input type="radio" id="mathAT" name="url" value="https://arxiv.org/list/math.AT/new" required>
-            <label for="mathAT">math.AT (Algebraic Topology)</label><br>
-            
-            <input type="radio" id="mathDG" name="url" value="https://arxiv.org/list/math.DG/new" required>
-            <label for="mathDG">math.DG (Differential Geometry)</label><br>
-            
-            <input type="radio" id="mathNT" name="url" value="https://arxiv.org/list/math.NT/new" required>
-            <label for="mathNT">math.NT (Number Theory)</label><br>
-        </fieldset>
-        
-        <label for="keywords">Keywords (space-separated):</label><br>
-        <input type="text" id="keywords" name="keywords" required><br><br>
-        
-        <input type="submit" value="Search">
-    </form>
+    <div class="card">
+        <h1>📚 arXiv Reader</h1>
+        <form action="https://arxiv-reader-dc763b3840de.herokuapp.com/search" method="POST">
+            <fieldset>
+                <legend>Choose a Category</legend>
+                <div class="radio-option">
+                    <input type="radio" id="mathAG" name="url" value="https://arxiv.org/list/math.AG/new" required>
+                    <label for="mathAG">math.AG (Algebraic Geometry)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="mathAC" name="url" value="https://arxiv.org/list/math.AC/new">
+                    <label for="mathAC">math.AC (Commutative Algebra)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="mathAT" name="url" value="https://arxiv.org/list/math.AT/new">
+                    <label for="mathAT">math.AT (Algebraic Topology)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="mathDG" name="url" value="https://arxiv.org/list/math.DG/new">
+                    <label for="mathDG">math.DG (Differential Geometry)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="mathNT" name="url" value="https://arxiv.org/list/math.NT/new">
+                    <label for="mathNT">math.NT (Number Theory)</label>
+                </div>
+            </fieldset>
+
+            <label class="keywords-label" for="keywords">Keywords (space-separated)</label>
+            <input type="text" id="keywords" name="keywords" placeholder="e.g. toric variety cohomology" required>
+
+            <input type="submit" value="Search">
+        </form>
+    </div>
 </body>
 </html>
 
