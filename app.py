@@ -4,6 +4,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from flask_cors import CORS
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 app = Flask(__name__)
 CORS(app, resources={r"/search": {"origins": "https://dombunnett.github.io"}})
@@ -68,12 +69,24 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    url = request.form.get('url')
+    urls = request.form.getlist('urls')
     keywords = request.form.get('keywords').split()
+
+    if not urls:
+        return render_template('results.html', results=[], count=0, error="Please select at least one category")
+
     try:
-        content = fetch_webpage(url)
-        articles = extract_articles(content)
-        filtered_articles = filter_articles(articles, keywords)
+        all_articles = {}
+
+        # Fetch all URLs in parallel
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            future_to_url = {executor.submit(fetch_webpage, url): url for url in urls}
+            for future in as_completed(future_to_url):
+                content = future.result()
+                articles = extract_articles(content)
+                all_articles.update(articles)
+
+        filtered_articles = filter_articles(all_articles, keywords)
         results_list = []
         for title, content in filtered_articles.items():
             arxiv_id = extract_arxiv_id(content)

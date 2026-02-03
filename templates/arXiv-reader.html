@@ -41,14 +41,14 @@
             color: #555;
             padding: 0 0.5rem;
         }
-        .radio-option {
+        .checkbox-option {
             display: flex;
             align-items: center;
             padding: 0.5rem 0;
             cursor: pointer;
         }
-        .radio-option:hover { background: #f8f9fa; border-radius: 4px; }
-        input[type="radio"] {
+        .checkbox-option:hover { background: #f8f9fa; border-radius: 4px; }
+        input[type="checkbox"] {
             width: 18px;
             height: 18px;
             accent-color: #667eea;
@@ -98,25 +98,25 @@
         <h1>📚 arXiv Reader</h1>
         <form action="https://arxiv-reader-dc763b3840de.herokuapp.com/search" method="POST">
             <fieldset>
-                <legend>Choose a Category</legend>
-                <div class="radio-option">
-                    <input type="radio" id="mathAG" name="url" value="https://arxiv.org/list/math.AG/new" required>
+                <legend>Choose Categories</legend>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="mathAG" name="urls" value="https://arxiv.org/list/math.AG/new">
                     <label for="mathAG">math.AG (Algebraic Geometry)</label>
                 </div>
-                <div class="radio-option">
-                    <input type="radio" id="mathAC" name="url" value="https://arxiv.org/list/math.AC/new">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="mathAC" name="urls" value="https://arxiv.org/list/math.AC/new">
                     <label for="mathAC">math.AC (Commutative Algebra)</label>
                 </div>
-                <div class="radio-option">
-                    <input type="radio" id="mathAT" name="url" value="https://arxiv.org/list/math.AT/new">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="mathAT" name="urls" value="https://arxiv.org/list/math.AT/new">
                     <label for="mathAT">math.AT (Algebraic Topology)</label>
                 </div>
-                <div class="radio-option">
-                    <input type="radio" id="mathDG" name="url" value="https://arxiv.org/list/math.DG/new">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="mathDG" name="urls" value="https://arxiv.org/list/math.DG/new">
                     <label for="mathDG">math.DG (Differential Geometry)</label>
                 </div>
-                <div class="radio-option">
-                    <input type="radio" id="mathNT" name="url" value="https://arxiv.org/list/math.NT/new">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="mathNT" name="urls" value="https://arxiv.org/list/math.NT/new">
                     <label for="mathNT">math.NT (Number Theory)</label>
                 </div>
             </fieldset>
