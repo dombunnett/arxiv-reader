@@ -82,9 +82,14 @@ def search():
         with ThreadPoolExecutor(max_workers=5) as executor:
             future_to_url = {executor.submit(fetch_webpage, url): url for url in urls}
             for future in as_completed(future_to_url):
+                url = future_to_url[future]
+                # Extract category from URL (e.g., "math.AG" from "https://arxiv.org/list/math.AG/new")
+                category = url.split('/list/')[1].split('/')[0]
                 content = future.result()
                 articles = extract_articles(content)
-                all_articles.update(articles)
+                # Prefix article keys with category to avoid collisions
+                for key, value in articles.items():
+                    all_articles[f"{category} {key}"] = value
 
         filtered_articles = filter_articles(all_articles, keywords)
         results_list = []
